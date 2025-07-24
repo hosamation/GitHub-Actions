@@ -1,0 +1,11 @@
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  # This cron expression means the workflow will run every day at midnight UTC.
+
+jobs:
+  daily_task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print a  message for Run daily script
+        run: echo "Running the scheduled daily task..."
