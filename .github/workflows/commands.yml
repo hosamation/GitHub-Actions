@@ -9,3 +9,8 @@ jobs:
           if [[ "$deprecated" ]]; then
             echo "::warning::Deprecated command detected. Please update your workflow."
           fi
+
+      - name: set API key
+        run: echo "API_KEY=1234567890" >> $GITHUB_ENV
+      - name: Use API key
+        run: echo "Using API key ${API_KEY}"
