@@ -1,0 +1,46 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  check_expressions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check expressions
+        run: echo "Checking expressions..."
+
+      # Example conditional steps
+      - name: Run only on push events
+        run: echo "This runs on push events"
+        if: ${{ github.event_name == 'push' }}
+
+      - name: Run only if NOT push event
+        run: echo "This runs when NOT a push event"
+        if: ${{ github.event_name != 'push' }}
+
+      - name: Run only for pushes to main
+        run: echo "Push to main branch"
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+      - name: Run for push OR main branch
+        run: echo "Push event OR main branch"
+        if: ${{ github.event_name == 'push' || github.ref == 'refs/heads/main' }}
+
+      - name: Skip if commit message contains WIP
+        run: echo "Commit message doesn't contain WIP"
+        if: ${{ !contains(github.event.head_commit.message, 'WIP') }}
+
+      - name: Run only for version tags
+        run: echo "Tag starting with v"
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+
+      - name: Run only on failure
+        run: echo "Previous step failed"
+        if: ${{ failure() }}
+
+      - name: Run only on success
+        run: echo "Previous steps succeeded"
+        if: ${{ success() }}
+
+      - name: Always run
+        run: echo "This always runs"
+        if: ${{ always() }}
