@@ -14,3 +14,11 @@ jobs:
         run: echo "API_KEY=1234567890" >> $GITHUB_ENV
       - name: Use API key
         run: echo "Using API key ${API_KEY}"
+
+      - name: Check if a file exists
+        run: |
+          if [ -f "config.yml" ]; then
+            echo "File config.yaml exists."
+          else
+            echo "::error::File config.yaml does not exist."
+          fi
