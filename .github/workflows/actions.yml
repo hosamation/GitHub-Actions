@@ -1,33 +1,49 @@
 on:
-  wrokflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-  hybrid_job:
-    runs-on: ubuntu-latest
+  job_1:
+    strategy:
+      fail-fast: false
+      max_parallel: 3
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node_version: [14.x, 15.x, 16.x]
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Run a command in Ubuntu VM
-        run: echo "This is a hybrid job running on Ubuntu VM"
-
-      - name: Run inside an Alpine container
-        uses: docker://alpine:3.14 # The image must be accessible without authentication
+      - uses: actions/setup-node@v3.6.0
         with:
-          entrypoint: /bin/sh
-          args: |
-            -c "echo 'This step runs inside an Alpine container'"
+          node-version: ${{ matrix.node_version }}
+# on:
+#   wrokflow_dispatch:
 
-      - name: Run another command in Ubuntu VM
-        run: echo "This is another command running on Ubuntu VM"
+# jobs:
+#   hybrid_job:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Run a command in Ubuntu VM
+#         run: echo "This is a hybrid job running on Ubuntu VM"
 
-  dockerized_job:
-    runs-on: ubuntu-latest
-    container: node:20 # The image must be accessible without authentication
+#       - name: Run inside an Alpine container
+#         uses: docker://alpine:3.14 # The image must be accessible without authentication
+#         with:
+#           entrypoint: /bin/sh
+#           args: |
+#             -c "echo 'This step runs inside an Alpine container'"
 
-    # container:
-    #   image: ghcr.io/my-org/my-private-image:latest
-    #   credentials:
-    #     username: ${{ secrets.DOCKER_USERNAME }}
-    #     password: ${{ secrets.DOCKER_PASSWORD }}
+#       - name: Run another command in Ubuntu VM
+#         run: echo "This is another command running on Ubuntu VM"
 
-    steps:
-      - run: node --version
-      - run: echo "This whole job runs inside a Node.js container"
+#   dockerized_job:
+#     runs-on: ubuntu-latest
+#     container: node:20 # The image must be accessible without authentication
+
+#     # container:
+#     #   image: ghcr.io/my-org/my-private-image:latest
+#     #   credentials:
+#     #     username: ${{ secrets.DOCKER_USERNAME }}
+#     #     password: ${{ secrets.DOCKER_PASSWORD }}
+
+#     steps:
+#       - run: node --version
+#       - run: echo "This whole job runs inside a Node.js container"
